@@ -102,11 +102,26 @@ profileForm?.addEventListener("submit", async (e) => {
   const newPhone = inputPhone.value.trim();
 
   try {
-    const { error } = await supabase.auth.updateUser({
-      data: { full_name: newName, phone: newPhone },
-    });
+    const { error: authError } = await supabase.auth.updateUser({
+  data: {
+    full_name: newName,
+    phone: newPhone,
+  },
+});
 
-    if (error) throw error;
+if (authError) throw authError;
+
+// Update profiles table
+const { error: profileError } = await supabase
+  .from("profiles")
+  .update({
+    email: session.user.email,
+    full_name: newName,
+    phone: newPhone,
+  })
+  .eq("id", session.user.id);
+
+if (profileError) throw profileError;
     alert("Profile updated successfully!");
 
     const updatedName = newName || session.user.email.split("@")[0];
