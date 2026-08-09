@@ -174,6 +174,6 @@ form.addEventListener("submit", async (e) => {
 
   toast("Login successful! Redirecting...");
   setTimeout(() => {
-    window.location.href = "./index.html";
+    window.location.href = "index.html";
   }, 800);
 });
